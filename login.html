@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Private Preview — Ivy Land & Planning</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  body { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--green); }
+  .gate-card {
+    width: 100%;
+    max-width: 380px;
+    margin: 24px;
+    text-align: center;
+  }
+  .gate-card img { height: 44px; margin: 0 auto 20px; filter: brightness(0) invert(1); opacity: 0.92; }
+  .gate-card h1 { color: var(--cream); font-size: 1.5rem; margin-bottom: 0.4em; }
+  .gate-card p { color: rgba(246, 241, 230, 0.72); font-size: 0.92rem; margin-bottom: 1.8em; }
+  .gate-field input {
+    width: 100%;
+    font-family: var(--sans);
+    font-size: 1rem;
+    padding: 13px 14px;
+    border: 1px solid rgba(246, 241, 230, 0.3);
+    background: rgba(246, 241, 230, 0.06);
+    color: var(--cream);
+    border-radius: 2px;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+  .gate-field input::placeholder { color: rgba(246, 241, 230, 0.45); }
+  .gate-field input:focus { outline: none; border-color: var(--cream); }
+  .gate-error {
+    color: #e8b4a0;
+    font-size: 0.82rem;
+    margin-top: 12px;
+  }
+  .gate-submit { width: 100%; justify-content: center; margin-top: 16px; }
+</style>
+</head>
+<body>
+
+<div class="gate-card">
+  <img src="assets/img/logo-colour.png" alt="Ivy Land & Planning">
+  <h1>Private Preview</h1>
+  <p>This site is a work-in-progress preview for Ivy Land &amp; Planning. Enter the password to continue.</p>
+  <form id="gate-form">
+    <div class="gate-field">
+      <input type="password" id="gate-password" name="password" placeholder="Password" autocomplete="off" autofocus required>
+    </div>
+    <button type="submit" class="btn btn-primary gate-submit">Enter Site</button>
+    <p class="gate-error" id="gate-error" hidden>That password isn't right — try again.</p>
+  </form>
+</div>
+
+<script>
+  var TARGET_HASH = "5159d68fbd9d5c3074816f4c53e1f82208ce6add0c094b928cd418fb7c2a3e15";
+
+  async function sha256Hex(text) {
+    var data = new TextEncoder().encode(text);
+    var digest = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(digest)).map(function (b) {
+      return b.toString(16).padStart(2, "0");
+    }).join("");
+  }
+
+  document.getElementById("gate-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var input = document.getElementById("gate-password");
+    var errorEl = document.getElementById("gate-error");
+    var hash = await sha256Hex(input.value.trim());
+
+    if (hash === TARGET_HASH) {
+      localStorage.setItem("ivyPreviewAuth", "ok");
+      var params = new URLSearchParams(location.search);
+      location.href = params.get("next") || "index.html";
+    } else {
+      errorEl.hidden = false;
+      input.value = "";
+      input.focus();
+    }
+  });
+</script>
+</body>
+</html>
