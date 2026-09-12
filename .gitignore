@@ -1,0 +1,9 @@
+# Internal working notes — not part of the public site
+/temp/
+
+# Claude Code tooling config — not part of the website
+/.claude/
+skills-lock.json
+
+# Internal planning doc — not meant for the public repo
+/PLAN.md
