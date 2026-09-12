@@ -7,3 +7,6 @@ skills-lock.json
 
 # Internal planning doc — not meant for the public repo
 /PLAN.md
+
+# Session handoff notes — contains the gate password in plain text
+/HANDOFF.md
